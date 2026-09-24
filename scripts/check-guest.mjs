@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import ts from 'typescript';
+function compile(file,imports={}){const exports={};const js=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;vm.runInNewContext(js,{exports,require:name=>imports[name],localStorage:storage,Date,JSON,Error,Object,Array,Number,RegExp});return exports;}
+let values=new Map(),failWrites=false;
+const storage={getItem:k=>values.get(k)||null,setItem:(k,v)=>{if(failWrites)throw Error('Quota exceeded');values.set(k,v);}};
+const records=compile('lib/records.ts');
+const guest=compile('lib/guest-records.ts',{'./records':records});
+assert.equal(Object.keys(guest.readGuestRecords()).length,0);
+const r={watched:true,wishlist:false,watchDate:'',rating:9,notes:'Guest note'};
+guest.writeGuestRecords({'1292052':r});
+assert.equal(guest.readGuestRecords()['1292052'].notes,'Guest note');
+assert.equal(guest.readGuestRecords()['1292052'].watched,true);
+failWrites=true;
+assert.throws(()=>guest.writeGuestRecords({}),/浏览器无法保存/);
+assert.equal(guest.readGuestRecords()['1292052'].notes,'Guest note');
+failWrites=false;values.set(guest.guestKey,'{invalid');
+assert.throws(()=>guest.readGuestRecords());
+values.set(guest.guestKey,JSON.stringify({'1292052':{...r,rating:11}}));
+assert.throws(()=>guest.readGuestRecords());
+console.log('7 guest-storage checks passed: reload, optional date, storage failure preservation, malformed backup, invalid rating.');

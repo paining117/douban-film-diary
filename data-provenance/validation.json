@@ -1,0 +1,70 @@
+{
+  "fetchedAt": "2026-09-24T02:11:21.969164+00:00",
+  "movieCount": 250,
+  "uniqueIds": 250,
+  "rankSequenceValid": true,
+  "validPosterCount": 250,
+  "failedPosters": [],
+  "pages": [
+    {
+      "url": "https://movie.douban.com/top250",
+      "path": "source-pages/top250-000.html",
+      "sha256": "7306981fa6de39247126802a229b9f5192759f06891fa824263cf5e3aaafdf2f",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=25&filter=",
+      "path": "source-pages/top250-025.html",
+      "sha256": "2777b993042bd37e4d3927af5937a6081e45e4ac5554c6a6907568a166c7d7d3",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=50&filter=",
+      "path": "source-pages/top250-050.html",
+      "sha256": "639f2b4dbd8610464409fd9f43719cc7e71431bcb38cc62fee0d97368f3c9f33",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=75&filter=",
+      "path": "source-pages/top250-075.html",
+      "sha256": "a7ad87bc2fead7e2a3b984b4a573eaec06fba6126e2148834cc81e6a2616d146",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=100&filter=",
+      "path": "source-pages/top250-100.html",
+      "sha256": "d72d542d378ff28664a0c5db3d722961960ab7eb419e70914b2f417f5a3873d7",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=125&filter=",
+      "path": "source-pages/top250-125.html",
+      "sha256": "2ec22bf1e4be9d272d0afaa9930d538b3093ff56492deaef5be7c3f0a7182cf2",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=150&filter=",
+      "path": "source-pages/top250-150.html",
+      "sha256": "6b35e04461c5f9d92ec5165e9afc57a7bf1d2dd963f58ff909579ce7175f6fe2",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=175&filter=",
+      "path": "source-pages/top250-175.html",
+      "sha256": "b69ac73a8d34d59f7a7b56e8e36fb66a81230fddded16cbbbf42653f50a4bd72",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=200&filter=",
+      "path": "source-pages/top250-200.html",
+      "sha256": "39e76bf1c80146647be7269fd1c3fc36ce777477af5adcef987b9f6faad87ead",
+      "count": 25
+    },
+    {
+      "url": "https://movie.douban.com/top250?start=225&filter=",
+      "path": "source-pages/top250-225.html",
+      "sha256": "70e74a4b5aa758483c5531cb7a134ba14a94ec9523527b736fff32f131d128a7",
+      "count": 25
+    }
+  ]
+}

@@ -30,6 +30,6 @@ ok((await call(a,'PUT',{'1292052':{...base,rating:9},'1291546':{...base,rating:-
 ok((await call(a)).data.records['1292052'].rating===8);
 ok((await call(a,'PUT',{'1292052':{...base,watchDate:'2025-06-08'},'1291546':{...base,wishlist:true,watched:false}})).status===200);
 saved=(await call(a)).data.records;
-ok(saved['1292052'].watchDate==='2025-06-08'&&saved['1291546'].wishlist);
+ok(saved['1292052'].watchDate==='2025-06'&&saved['1291546'].wishlist);
 ok((await call(b)).data.records['1292052'].notes==='独立账号记录');
 console.log(JSON.stringify({passed,accounts:[a,b],scope:'Local production Worker and local D1; platform sign-in and physical cross-device access are not covered'}));

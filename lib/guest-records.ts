@@ -5,10 +5,16 @@ export function readGuestRecords(): Record<string,FilmRecord> {
   if(!raw)return {};
   const data=JSON.parse(raw);
   if(!data || Array.isArray(data) || typeof data!=='object' || Object.keys(data).length>250)throw Error('游客记录格式异常，请先导出浏览器数据后再处理。');
-  return Object.fromEntries(Object.entries(data).map(([id,value])=>{
+  let migrated=false;
+  const records=Object.fromEntries(Object.entries(data).map(([id,value])=>{
     if(!/^\d{1,12}$/.test(id))throw Error('游客记录格式异常');
-    return [id,validateRecord(value)];
+    const clean=validateRecord(value);
+    const old=value as FilmRecord;
+    if(clean.watchDate!==old.watchDate)migrated=true;
+    return [id,{...clean,...(typeof old.updatedAt==='string'?{updatedAt:old.updatedAt}:{})}];
   }));
+  if(migrated)writeGuestRecords(records);
+  return records;
 }
 export function writeGuestRecords(records:Record<string,FilmRecord>) {
   try { localStorage.setItem(guestKey,JSON.stringify(records)); }

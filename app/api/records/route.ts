@@ -1,5 +1,5 @@
 import { recordsDb } from '@/db/records';
-import { validateRecord } from '@/lib/records';
+import { validateRecord, normalizeWatchDate } from '@/lib/records';
 export const dynamic = 'force-dynamic';
 const json = (value: unknown, status = 200) => Response.json(value, { status, headers: { 'Cache-Control': 'no-store' } });
 export async function GET(request: Request) {
@@ -12,7 +12,14 @@ export async function GET(request: Request) {
   }
   accountName = accountName.trim() || account.split('@')[0] || '已登录';
   try {
-    const { results } = await recordsDb().prepare('SELECT film_id, watched, wishlist, watch_date, rating, notes, updated_at FROM film_records WHERE user_id = ?').bind(user).all();
+    const db=recordsDb();
+    const { results } = await db.prepare('SELECT film_id, watched, wishlist, watch_date, rating, notes, updated_at FROM film_records WHERE user_id = ?').bind(user).all();
+    const legacy=results.filter(r=>typeof r.watch_date==='string' && r.watch_date.length===10);
+    if(legacy.length) {
+      // Compare the old date so a concurrent save cannot be overwritten by migration.
+      await db.batch(legacy.map(r=>db.prepare('UPDATE film_records SET watch_date = ? WHERE user_id = ? AND film_id = ? AND watch_date = ?').bind(normalizeWatchDate(String(r.watch_date)),user,r.film_id,r.watch_date)));
+      for(const r of legacy)r.watch_date=normalizeWatchDate(String(r.watch_date));
+    }
     return json({ account: account || '已登录账号', accountName, records: Object.fromEntries(results.map(r => [r.film_id, { watched: !!r.watched, wishlist: !!r.wishlist, watchDate: r.watch_date, rating: r.rating, notes: r.notes, updatedAt: r.updated_at }])) });
   } catch (e) { console.error('Load records failed', e); return json({ error: '云端记录暂时无法读取，请稍后重试。' }, 503); }
 }

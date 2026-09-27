@@ -43,6 +43,6 @@ check(call(A, 'PUT', {'1292052': dict(base, rating=9), '1291546': dict(base, rat
 check(call(A)[1]['records']['1292052']['rating'] == 8)
 check(call(A, 'PUT', {'1292052': dict(base, watchDate='2025-06-08'), '1291546': dict(base, watched=False, wishlist=True)})[0] == 200)
 saved = call(A)[1]['records']
-check(saved['1292052']['watchDate'] == '2025-06-08' and saved['1291546']['wishlist'])
+check(saved['1292052']['watchDate'] == '2025-06' and saved['1291546']['wishlist'])
 check(call(B)[1]['records']['1292052']['notes'] == 'Account B')
 print(json.dumps({'passed': passed, 'accounts': [A, B], 'scope': 'Local production Worker and local D1'}))

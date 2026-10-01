@@ -1,10 +1,31 @@
 # 部署与数据边界
 
-本仓库是「片刻」网页的公开源码，不包含在线站点的部署标识、访问凭据、用户观影记录或本地测试数据库。
+GitHub 上的本仓库是「片刻」网页的公开源码，不包含在线站点的部署标识、访问凭据、用户观影记录或本地测试数据库。本机只维护一个 `douban-film-diary` 工作目录，开发分支保留原站点部署配置。
+
+## 一个目录，两个发布用途
+
+- `main`：日常开发与 Sites 部署，保留原有开发历史和本机 `.openai/hosting.json` 的站点标识。
+- `github-public`：GitHub 公开源码历史，延续原 GitHub 仓库提交；不合并开发分支的私有历史。
+- `github`：指向原 GitHub 仓库的 remote，默认只把 `github-public` 推送到远端 `main`。
+
+在 `main` 修改并提交后，从项目根目录执行：
+
+```sh
+node scripts/prepare-github.mjs --check
+node scripts/prepare-github.mjs --write
+git diff github/main..github-public --stat
+git push github github-public:main
+```
+
+前两条命令完全在本机运行，不部署、不联网推送。脚本只导出已提交的源码，用临时 Git 索引移除部署标识，不修改工作目录的部署配置；公开提交只以此前的公开提交为父提交。`--check` 只检查待导出的树，`--write` 更新本机公开分支。最后一条命令才会发布到 GitHub，应在明确要发布时执行；若远端有新提交，先检查并处理分歧，不要强制推送。
+
+本机已安装 `scripts/guard-public-push.sh` 作为 `.git/hooks/pre-push`，阻止将开发分支或包含私有开发历史的提交推到这个 GitHub 仓库。新克隆不会自动安装 Git 钩子。GitHub 发布和 Sites 部署仍是两个独立操作。
+
+本次目录整合未重新部署网站，也未推送 GitHub。原两份仓库的 Git bundle 备份保存在工作区 `Codex/整理记录/2026-10-01/`。
 
 ## Sites 部署
 
-`.openai/hosting.json` 保留逻辑 D1 绑定 `DB`，不包含现有网站的 `project_id`。部署为自己的 Sites 网站时，应注册自己的项目、写入新的项目标识，再使用 Sites 发布流程构建与部署。生产迁移位于 `drizzle/`。
+公开分支的 `.openai/hosting.json` 保留逻辑 D1 绑定 `DB`，不包含现有网站的 `project_id`；本机开发分支保留该标识。部署为自己的 Sites 网站时，应注册自己的项目、写入新的项目标识，再使用 Sites 发布流程构建与部署。生产迁移位于 `drizzle/`。
 
 ## 身份验证
 

@@ -72,7 +72,7 @@ node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js de
 
 ## 部署与数据
 
-本仓库没有在线站点的部署标识、用户记录或登录凭据。云端账号登录依赖 Sites 提供的认证，迁移到其他托管平台需要接入可信的服务端认证，不能直接信任客户端提交的身份请求头。具体说明见 [PUBLISHING.md](PUBLISHING.md)。
+GitHub 公开版本没有在线站点的部署标识、用户记录或登录凭据。本机开发分支保留 Sites 部署配置，通过独立公开分支发布源码。云端账号登录依赖 Sites 提供的认证，迁移到其他托管平台需要接入可信的服务端认证，不能直接信任客户端提交的身份请求头。具体说明见 [PUBLISHING.md](PUBLISHING.md)。
 
 榜单来自 [豆瓣电影 Top250](https://movie.douban.com/top250)，采集日期为 **2026-09-24**，不是实时排名。详细来源和校验信息见 [SOURCES.md](SOURCES.md)。
 

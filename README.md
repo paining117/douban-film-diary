@@ -18,6 +18,8 @@
 
 日期支持只填年份（如 2024）或年月（如 2024-06），只填年份不计入具体月份。旧日级日期在读取记录或导入备份时自动转换为年月，评分、笔记和更新时间保留。
 
+采用暖白纸感底色、墨绿控件和电影手账排版，统一首页、观影记录及本月已看弹窗的外观。
+
 ## 技术栈
 
 React 19、TypeScript、Vinext / Vite、Tailwind CSS、Radix UI / shadcn、Cloudflare Workers / D1、Drizzle 数据库迁移。

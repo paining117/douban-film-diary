@@ -10,7 +10,8 @@ while read local_ref local_sha remote_ref remote_sha; do
     echo 'Push blocked: use git push github github-public:main; never push development main.' >&2
     exit 1
   fi
-  if git show "$local_sha:.openai/hosting.json" | grep -q 'project_id'; then
+  hosting=$(git show "$local_sha:.openai/hosting.json") || exit 1
+  if printf '%s' "$hosting" | grep -q 'project_id'; then
     echo 'Push blocked: deployment project_id is present.' >&2
     exit 1
   fi

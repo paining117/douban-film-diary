@@ -1,10 +1,16 @@
 export type FilmRecord = { watched: boolean; wishlist: boolean; watchDate: string; rating: number; notes: string; updatedAt?: string };
 export const blankRecord: FilmRecord = { watched: false, wishlist: false, watchDate: '', rating: 0, notes: '' };
+export function currentWatchMonth(now = new Date()): string {
+  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+}
+export function setWatched(record: FilmRecord, watched: boolean, now = new Date()): FilmRecord {
+  return { ...record, watched, ...(watched ? { wishlist:false, watchDate:record.watchDate || currentWatchMonth(now) } : {}) };
+}
 export function validDate(value: unknown): value is string {
   if (value === '') return true;
   if (typeof value !== 'string' || !/^\d{4}(?:-\d{2}(?:-\d{2})?)?$/.test(value) || Number(value.slice(0,4)) < 1) return false;
   const now = new Date();
-  const month = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const month = currentWatchMonth(now);
   if (value.length === 4) return value <= month.slice(0,4);
   if (Number(value.slice(5,7)) < 1 || Number(value.slice(5,7)) > 12 || value.slice(0,7) > month) return false;
   if (value.length === 7) return true;

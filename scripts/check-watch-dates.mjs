@@ -14,6 +14,20 @@ function compile(file,imports={}) {
 }
 const records=compile('lib/records.ts');
 const base={watched:true,wishlist:false,watchDate:'',rating:8,notes:'Preserve my notes'};
+// Use local calendar dates, including midnight when UTC is in a different month.
+const checkedAt=new Date(2024,2,1,0,5);
+const unchecked={...base,watched:false,wishlist:true};
+const autoDated=records.setWatched(unchecked,true,checkedAt);
+assert.equal(autoDated.watchDate,'2024-03');
+assert.equal(autoDated.wishlist,false);
+assert.equal(autoDated.notes,base.notes);assert.equal(autoDated.rating,8);
+assert.equal(unchecked.watchDate,'','Do not mutate the previous record');
+assert.equal(records.isWatchedInMonth(autoDated,'2024-03'),true);
+for(const date of ['2022','2024-02'])assert.equal(records.setWatched({...unchecked,watchDate:date},true,checkedAt).watchDate,date);
+assert.equal(records.setWatched(autoDated,false,checkedAt).watchDate,'2024-03');
+assert.equal(records.validateRecord({...autoDated,watchDate:''}).watchDate,'','Manually clearing an optional date must survive saving');
+assert.equal(records.currentWatchMonth(new Date(2024,11,31,23,59)),'2024-12');
+assert.equal(records.currentWatchMonth(new Date(2025,0,1,0,1)),'2025-01');
 for(const date of ['', '1999','2024-02','2024-02-29'])assert.equal(records.validDate(date),true,date);
 for(const date of ['0000','24','2024-2','2024-00','2024-13','2023-02-29','2024-02-30','9999','9999-01'])assert.equal(records.validDate(date),false,date);
 assert.equal(records.validateRecord({...base,watchDate:'2024-02-29'}).watchDate,'2024-02');
